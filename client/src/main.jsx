@@ -12,15 +12,20 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import Choose from './Choose.jsx'
 
 const router = createBrowserRouter([
+  // {
+  //   path: "/",
+  //   element: <Hero/>,
+  // },
   {
     path: "/",
-    element: <Hero/>,
+    element: <Login/>,
   },
   {
-    path: "login",
-    element: <Login/>,
+    path: "choose",
+    element: <Choose/>,
   },
   {
     path:"workspace",

@@ -7,9 +7,19 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect(
-  "mongodb+srv://debmalya:skCH6Mf2bRrhbOSq@cluster0.ue55gpc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-);
+// mongoose.connect(
+//   "mongodb+srv://debmalya:skCH6Mf2bRrhbOSq@cluster0.ue55gpc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+// );
+
+
+//for ssd
+mongoose.connect("mongodb://127.0.0.1:27017", {
+  dbName: "bhashantar"
+})
+  .then(() => console.log("Database Connected"))
+  .catch((e) => console.log(e));
+
+
 
 app.post("/login", (req, res) => {
   const { name, password } = req.body;
@@ -29,6 +39,15 @@ app.post("/login", (req, res) => {
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
-app.listen(5566, () => {
-  console.log("server is running");
+
+
+
+
+app.get("/", (req, res) => {
+  res.send("Backend is Running Successfully");
+});
+
+const PORT = process.env.PORT || 5566;
+app.listen(PORT, () => {
+  console.log(`Server started on PORT: ${PORT} `);
 });
