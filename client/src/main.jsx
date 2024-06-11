@@ -12,7 +12,11 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Choose from './Choose.jsx'
+import Choose from './Pages/Choose.jsx'
+
+export const server = "http://localhost:5566";
+
+const NotFound = () => <div>Page Not Found</div>;
 
 const router = createBrowserRouter([
   // {
@@ -30,6 +34,10 @@ const router = createBrowserRouter([
   {
     path:"workspace",
     element: <Workspace/>,
+  },
+  {
+    path: "*",
+    element: <NotFound/>,
   }
 ]);
 
@@ -66,3 +74,19 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     
   </React.StrictMode>
 )
+
+
+
+
+
+
+// import React from 'react';
+// import ReactDOM from 'react-dom/client';
+// import './index.css';
+// import App from './App';
+
+// ReactDOM.createRoot(document.getElementById('root')).render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>
+// );
