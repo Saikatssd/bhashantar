@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -18,50 +18,46 @@ import Button from '@mui/material/Button';
 import AttractionsIcon from '@mui/icons-material/Attractions';
 import logo from '/logo.png';
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "./store/authSlice";
+import Cookies from 'js-cookie';
 
-// function ButtonAppBar(props) {
-//   return (
-//     <Box sx={{ flexGrow: 1 }}>
-//       <AppBar position="static" sx = {{backgroundColor:"transparent", color:"black", boxShadow: "0px 0px 0px 0px"
-//       }}>
-//         <Toolbar>
-//           <IconButton
-//             size="large"
-//             edge="start"
-//             color="inherit"
-//             aria-label="menu"
-//             sx={{ mr: 2 }}
-//           >
-//             <AttractionsIcon sx = {{fontSize:"40px", color:"green"}} />
-//           </IconButton>
-//           <Typography variant="h6" component="div" sx={{ flexGrow: 1,fontFamily: 'monospace',
-//               fontWeight: 700,
-//               letterSpacing: '.3rem',
-//               color: 'inherit',
-//               textDecoration: 'none', }}>
-//             BHASHANTAAR
-//           </Typography>
-//           <Button sx ={{fontWeight:700,color:"black",marginX:"5px"}}>Home</Button>
-//       <Button sx={{fontWeight:700,color:"black",marginX:"5px"}}>About Us</Button>
-//       <Button sx={{fontWeight:700,color:"black",marginX:"5px"}}>Contact</Button>
-//           <Button sx = {{backgroundColor:"green", color:"white", boxShadow: "0px 0px 0px 0px", marginLeft:"50px"
-//       }}>Login</Button>
-//         </Toolbar>
-//       </AppBar>
-//     </Box>
-//   );
-// }
 
-// export default ButtonAppBar;
 
-// const navigate = useNavigate();
 const drawerWidth = 240;
 const navItems = [{ text: 'Home', link: '/choose' },
-{ text: 'About', link: '/' },
-{ text: 'Features', link: '/' },
-{ text: 'Contact', link: '/' },]
+{ text: 'About', link: '/about' },
+{ text: 'Features', link: '/features' },
+{ text: 'Contact', link: '/contact' },]
 
 function DrawerAppBar(props) {
+  // const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate= useNavigate();
+
+  const { isAuthenticated, loading, error,user } = useSelector(
+    (state) => state.auth
+  );
+
+
+
+const userToken = Cookies.get('token');
+
+if (userToken) {
+  console.log('User is logged in:', userToken);
+} else {
+  console.log('User is not logged in');
+}
+
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate("/");
+  };
+
+  // console.log("isAuth in AppBar", isAuthenticated)
+  // console.log("user in AppBar", user)
+
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -69,10 +65,7 @@ function DrawerAppBar(props) {
     setMobileOpen((prevState) => !prevState);
   };
 
-  const logoutHandler = () => {
-    // localStorage.removeItem('token');
-    // navigate("/");
-  }
+
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -126,10 +119,16 @@ function DrawerAppBar(props) {
                 {item.text}
               </Button>
             ))}
+            {isAuthenticated ? (
+              <Button className=" rounded-md" sx={{ fontWeight: 700, color: "black", marginX: "5px" }} onClick={logoutHandler}>Logout</Button>
+            ) : (
+
+              <p></p>
+            )}
           </Box>
           {/* <Button variant="contained" color="success" href='/login' sx = {{ marginLeft:"50px",display: { xs: 'none', sm: 'block' }
       }}>Login</Button> */}
-          {/* <Button className=" rounded-md" onClick={logoutHandler}>Logout</Button> */}
+
 
         </Toolbar>
       </AppBar>
@@ -156,3 +155,46 @@ function DrawerAppBar(props) {
 
 
 export default DrawerAppBar;
+
+
+
+
+
+
+
+
+
+// function ButtonAppBar(props) {
+//   return (
+//     <Box sx={{ flexGrow: 1 }}>
+//       <AppBar position="static" sx = {{backgroundColor:"transparent", color:"black", boxShadow: "0px 0px 0px 0px"
+//       }}>
+//         <Toolbar>
+//           <IconButton
+//             size="large"
+//             edge="start"
+//             color="inherit"
+//             aria-label="menu"
+//             sx={{ mr: 2 }}
+//           >
+//             <AttractionsIcon sx = {{fontSize:"40px", color:"green"}} />
+//           </IconButton>
+//           <Typography variant="h6" component="div" sx={{ flexGrow: 1,fontFamily: 'monospace',
+//               fontWeight: 700,
+//               letterSpacing: '.3rem',
+//               color: 'inherit',
+//               textDecoration: 'none', }}>
+//             BHASHANTAAR
+//           </Typography>
+//           <Button sx ={{fontWeight:700,color:"black",marginX:"5px"}}>Home</Button>
+//       <Button sx={{fontWeight:700,color:"black",marginX:"5px"}}>About Us</Button>
+//       <Button sx={{fontWeight:700,color:"black",marginX:"5px"}}>Contact</Button>
+//           <Button sx = {{backgroundColor:"green", color:"white", boxShadow: "0px 0px 0px 0px", marginLeft:"50px"
+//       }}>Login</Button>
+//         </Toolbar>
+//       </AppBar>
+//     </Box>
+//   );
+// }
+
+// export default ButtonAppBar;

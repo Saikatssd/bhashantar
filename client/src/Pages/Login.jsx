@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Alert, AlertTitle } from "@mui/material";
-
-import { server } from "./main.jsx"
-
+import { login } from "../store/authActions.jsx";
+import { server } from "../main.jsx"
+import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -38,32 +38,53 @@ function Login() {
   // };
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    try {
-      const { data } = await axios.post(
-        `${server}/users/login`,
-        {
-          email,
-          password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+  //   try {
+  //     const { data } = await axios.post(
+  //       `${server}/users/login`,
+  //       {
+  //         email,
+  //         password,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     navigate("/choose");
+  //     console.log(data);
+  //   } catch (error) {
+  //     setAlertMessage(error.response.data.message);
+  //     setAlertVisible(true);
+  //     console.log(error.response.data.message);
+
+  //   }
+  // }
+  const dispatch = useDispatch();
+  const { isAuthenticated, loading, error } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isAuthenticated) {
       navigate("/choose");
-      console.log(data);
-    } catch (error) {
-      setAlertMessage(error.response.data.message);
+    }
+    if (error) {
+      setAlertMessage(error);
       setAlertVisible(true);
-      console.log(error.response.data.message);
 
     }
-  }
+  }, [dispatch, isAuthenticated, error]);
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await dispatch(login({ email, password }));
+  };
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center">

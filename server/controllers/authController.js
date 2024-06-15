@@ -2,7 +2,7 @@ const User = require('../models/user');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcryptjs');
 const sendCookie = require('../utils/sendCookie');
-const { ErrorHandler, errorMiddleware } = require('../middleware/errorHandler');
+const ErrorHandler = require('../utils/errorHandler');
 
 // console.log(req.cookies)
 
@@ -13,7 +13,7 @@ exports.login = async (req, res, next) => {
 
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
-      return next(new ErrorHandler("Invalid credentials", 400));
+      return next(new ErrorHandler("User Not found", 400));
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -26,8 +26,7 @@ exports.login = async (req, res, next) => {
 
   } catch (error) {
     next(error);
-    console.error('Error during sign-in:', error);
-    res.status(500).json({ message: 'Server error' });
+    // res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -80,7 +79,7 @@ exports.isAuthenticated = async (req, res, next) => {
   try {
     const { token } = req.cookies;
 
-    console.log("Received token:", token);
+    // console.log("Received token:", token);
 
     if (!token)
       return res.status(404).json({
@@ -90,7 +89,7 @@ exports.isAuthenticated = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log("Decoded token:", decoded);
+    // console.log("Decoded token:", decoded);
 
     req.user = await User.findById(decoded._id);
 
