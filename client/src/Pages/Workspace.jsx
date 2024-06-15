@@ -268,7 +268,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Table from './Components/Table'; // Make sure this path is correct
+import Table from '../Components/Table'; // Make sure this path is correct
 
 const columns = [
   { id: 'id', label: 'Id No.', minWidth: 100 },
@@ -283,7 +283,7 @@ const rows = [
   { id: '2', fileName: 'Document2', page: '15', date: '02.01.2021' },
   { id: '3', fileName: 'Document2', page: '15', date: '02.01.2021' },
   { id: '4', fileName: 'Document2', page: '15', date: '02.01.2021' },
-  
+
 ];
 
 const column2 = [
@@ -293,15 +293,15 @@ const column2 = [
   // { id: 'date', label: 'Modified\u00a0Date', minWidth: 100 },
   { id: 'status', label: 'Status', minWidth: 100 },
   { id: 'assigned', label: 'Assigned\u00a0to', minWidth: 100 },
-  
+
 ];
 
 const row2 = [
-  { id: '1', fileName: 'Document1', page: '10', status:'working', assigned:'SSD' },
-  { id: '2', fileName: 'Document2', page: '15', status:'working', assigned:'MD' },
-  { id: '3', fileName: 'Document2', page: '15', status:'working', assigned:'CD' },
-  { id: '4', fileName: 'Document2', page: '15', status:'working', assigned:'MG' },
-  
+  { id: '1', fileName: 'Document1', page: '10', status: 'in progress', assigned: 'SSD' },
+  { id: '2', fileName: 'Document2', page: '15', status: 'not started', assigned: 'MD' },
+  { id: '3', fileName: 'Document2', page: '15', status: 'in progress', assigned: 'CD' },
+  { id: '4', fileName: 'Document2', page: '15', status: 'not started', assigned: 'MG' },
+
 ];
 
 
@@ -312,15 +312,17 @@ const column3 = [
   // { id: 'date', label: 'Modified\u00a0Date', minWidth: 100 },
   { id: 'status', label: 'Status', minWidth: 100 },
   { id: 'assigned', label: 'Assigned\u00a0to', minWidth: 100 },
-  
+  { id: 'date', label: 'Date\u00a0Completed', minWidth: 100 },
+
+
 ];
 
 const row3 = [
-  { id: '1', fileName: 'Document1', page: '10', status:'completed', assigned:'SSD' },
-  { id: '2', fileName: 'Document2', page: '15', status:'completed', assigned:'MD' },
-  { id: '3', fileName: 'Document2', page: '15', status:'completed', assigned:'CD' },
-  { id: '4', fileName: 'Document2', page: '15', status:'completed', assigned:'MG' },
-  
+  { id: '1', fileName: 'Document1', page: '10', status: 'completed', assigned: 'SSD', date: '01.01.2021' },
+  { id: '2', fileName: 'Document2', page: '15', status: 'completed', assigned: 'MD', date: '02.01.2021' },
+  { id: '3', fileName: 'Document2', page: '15', status: 'completed', assigned: 'CD', date: '02.01.2021' },
+  { id: '4', fileName: 'Document2', page: '15', status: 'completed', assigned: 'MG', date: '02.01.2021' },
+
 ];
 
 
@@ -388,11 +390,11 @@ function Workspace() {
         />
       </CustomTabPanel>
 
-        {/* In progress */}
+      {/* In progress */}
       <CustomTabPanel value={tabValue} index={1}>
         <Table
           columns={column2}
-          rows={row2} 
+          rows={row2}
           page={page}
           rowsPerPage={rowsPerPage}
           handleChangePage={handleChangePage}
@@ -401,11 +403,11 @@ function Workspace() {
         />
       </CustomTabPanel>
 
-        {/* Completed  */}
+      {/* Completed  */}
       <CustomTabPanel value={tabValue} index={2}>
         <Table
           columns={column3}
-          rows={row3} 
+          rows={row3}
           page={page}
           rowsPerPage={rowsPerPage}
           handleChangePage={handleChangePage}
