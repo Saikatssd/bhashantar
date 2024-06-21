@@ -6,7 +6,7 @@ export default function Choose() {
 
     const { user } = useSelector(
         (state) => state.auth);
-    // console.log("user", user);
+    console.log("user", user);
 
     return (
         <div className="h-screen flex flex-col items-center">

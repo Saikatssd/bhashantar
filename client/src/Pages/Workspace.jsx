@@ -291,16 +291,18 @@ const column2 = [
   { id: 'fileName', label: 'File\u00a0Name', minWidth: 100 },
   { id: 'page', label: 'Page\u00a0Count', minWidth: 100 },
   // { id: 'date', label: 'Modified\u00a0Date', minWidth: 100 },
+  { id: 'date', label: 'Assigned\u00a0Date', minWidth: 100 },
   { id: 'status', label: 'Status', minWidth: 100 },
+
   { id: 'assigned', label: 'Assigned\u00a0to', minWidth: 100 },
 
 ];
 
 const row2 = [
-  { id: '1', fileName: 'Document1', page: '10', status: 'in progress', assigned: 'SSD' },
-  { id: '2', fileName: 'Document2', page: '15', status: 'not started', assigned: 'MD' },
-  { id: '3', fileName: 'Document2', page: '15', status: 'in progress', assigned: 'CD' },
-  { id: '4', fileName: 'Document2', page: '15', status: 'not started', assigned: 'MG' },
+  { id: '1', fileName: 'Document1', page: '10', date: '01.01.2021', status: 'in progress', assigned: 'SSD' },
+  { id: '2', fileName: 'Document2', page: '15', date: '01.01.2021', status: 'not started', assigned: 'MD' },
+  { id: '3', fileName: 'Document2', page: '15', date: '01.01.2021', status: 'in progress', assigned: 'CD' },
+  { id: '4', fileName: 'Document2', page: '15', date: '01.01.2021', status: 'not started', assigned: 'MG' },
 
 ];
 

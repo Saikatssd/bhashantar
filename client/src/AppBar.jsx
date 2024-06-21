@@ -41,13 +41,13 @@ function DrawerAppBar(props) {
 
 
 
-const userToken = Cookies.get('token');
+// const userToken = Cookies.get('token');
 
-if (userToken) {
-  console.log('User is logged in:', userToken);
-} else {
-  console.log('User is not logged in');
-}
+// if (userToken) {
+//   console.log('User is logged in:', userToken);
+// } else {
+//   console.log('User is not logged in');
+// }
 
 
   const logoutHandler = () => {
