@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { register, login} from './authActions'
+import { register, login, loadUser } from './authActions'
 import { setAuthToken } from './authActions';
+import Cookies from "js-cookie"
 
 
 const authSlice = createSlice({
@@ -15,10 +16,14 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       localStorage.removeItem('token');
+      Cookies.remove('token');
       setAuthToken(null);
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
+    },
+    setCredentials: (state, { payload }) => {
+      state.user = payload
     },
   },
   extraReducers: (builder) => {
@@ -51,9 +56,21 @@ const authSlice = createSlice({
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(loadUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loadUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(loadUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setCredentials } = authSlice.actions;
 export default authSlice.reducer;
