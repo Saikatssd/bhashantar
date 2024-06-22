@@ -45,7 +45,7 @@ const Home = () => {
                     className="mb-4 w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center"
                     onClick={toggleSidebar}
                 >
-                    <span>1</span>
+                    <span>=</span>
                 </button>
                
             </div>
