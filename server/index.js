@@ -2,11 +2,15 @@ require("dotenv").config({ path: "./config.env" });
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const cookieParser = require("cookie-parser");
-const authRoutes = require("./routes/authRoutes");
-const errorMiddlware = require("./middleware/errorMiddleware.js");
+const cookieParser = require('cookie-parser');
+const authRoutes = require("./routes/authRoutes")
+const errorMiddlware = require("./middleware/errorMiddleware.js")
+// const initializeDefaults = require('./utils/seeder.js')
+const connectDatabase = require('./Database/Database.js')
 
-// const userModel = require("./models/user");
+
+//for ssd
+connectDatabase();
 
 const app = express();
 app.use(express.json());
@@ -24,27 +28,22 @@ app.use(cookieParser());
 app.use("/users", authRoutes);
 
 app.use(errorMiddlware);
-// mongoose.connect(
-//   "mongodb+srv://debmalya:skCH6Mf2bRrhbOSq@cluster0.ue55gpc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-// );
 
-const DB_URI =
-  "mongodb+srv://debmalya:skCH6Mf2bRrhbOSq@cluster0.ue55gpc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
-//for ssd
-// const DB_URI = "mongodb://127.0.0.1:27017/bhashantar";
+// const DB_URI =
+//   "mongodb+srv://debmalya:skCH6Mf2bRrhbOSq@cluster0.ue55gpc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
-mongoose
-  .connect(DB_URI, {})
-  .then((connection) => {
-    console.log(
-      "MongoDB Database connected with HOST:",
-      connection.connection.host
-    );
-  })
-  .catch((error) => {
-    console.error("Error connecting to the database:", error.message);
-  });
+// mongoose.connect(DB_URI, {})
+//   .then((connection) => {
+//     console.log('MongoDB Database connected with HOST:', connection.connection.host);
+//      initializeDefaults();
+//   })
+//   .catch((error) => {
+//     console.error('Error connecting to the database:', error.message);
+//   });
+
+
+
 
 app.get("/", (req, res) => {
   res.send("Backend is Running Successfully");

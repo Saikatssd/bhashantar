@@ -1,20 +1,27 @@
-const Role = require('../models/roles');
+const Role = require('../models/role');
 const User = require('../models/user');
-const mongoose = require('mongoose')
+const ErrorHandler = require('../utils/errorHandler')
+const jwt = require('jsonwebtoken')
 
-async function checkRole(roleName) {
-  return async function (req, res, next) {
+const checkRole = (roleName) => {
+  return async (req, res, next) => {
     try {
-      const user = await User.findById(req.user.id).populate('role');
+      const { token } = req.cookies;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      // console.log("Decoded token:", decoded);
+
+      const user = await User.findById(decoded._id).populate('role');
+      // console.log("user id", decoded._id)
+      // console.log("user role",user.role.role_name)
       if (user.role.role_name === roleName || user.role.role_name === 'superAdmin') {
         next();
       } else {
-        res.status(403).json({ message: 'Forbidden' });
+        return next(new ErrorHandler("Access denied", 403));
       }
     } catch (err) {
-      res.status(500).json({ message: 'Internal Server Error' });
+      return next(new ErrorHandler(`Access of ${roleName} required `, 401));
     }
   };
-}
+};
 
 module.exports = checkRole;
