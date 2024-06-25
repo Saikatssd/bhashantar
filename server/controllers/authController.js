@@ -42,6 +42,7 @@ exports.register = async (req, res, next) => {
       password: hashedPassword,
       role: role._id,
       companyId: company ? company._id : null,
+      // companyId:  null,
     });
     if (role_name == 'admin') {
       company.admin.push(user._id);

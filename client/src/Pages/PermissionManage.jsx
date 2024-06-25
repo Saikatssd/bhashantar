@@ -23,7 +23,7 @@ function RoleManage() {
             <h1 className="text-4xl font-bold text-center tracking-tight text-gray-900 sm:text-3xl mb-10">
                 Welcome to Permission Management
             </h1>
-            <div className="w-full flex justify-center">
+            <div className="w-full flex  justify-center">
                 <Box className="rounded-xl" sx={{ width: '50%', bgcolor: 'white', backdropFilter: 'blur(10px)' }}>
                     <Tabs value={value} onChange={handleChange} centered>
                         <Tab icon={<PeopleIcon />} iconPosition="start" label="User" sx={{ marginRight: "40px" }} />
@@ -35,6 +35,8 @@ function RoleManage() {
                 {value === 0 && <UserPermision tabValue={value} />}
                 {value === 1 && <AdminComponent />}
             </div>
+            <button className=' justify-center rounded-md bg-indigo-600 px-3 py-1.5 mt-6 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' type="submit">Update Permissions</button>
+
         </Container>
     );
 }

@@ -3,6 +3,31 @@ const Permission = require('../models/permission');
 const Role = require('../models/role');
 const ErrorHandler = require('../utils/errorHandler');
 
+exports.getPermission = async (req, res, next) => {
+  const { role_name } = req.query;
+
+  try {
+    // Find the role by role_name
+    const role = await Role.findOne({ role_name });
+
+    if (!role) {
+      return next(new ErrorHandler("Role not found", 404));
+    }
+
+    // Find the permission by role
+    const permission = await Permission.findOne({ role: role._id });
+
+    if (!permission) {
+      return next(new ErrorHandler("Permission not found for this role", 404));
+    }
+
+    res.status(200).json({ permission });
+  } catch (error) {
+    console.error('Error fetching permission:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 exports.permission = async (req, res, next) => {
   const { role_name, links, view, add, edit, delete: del, upload, download } = req.body;
 
