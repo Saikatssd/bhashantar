@@ -3,6 +3,19 @@ const Role = require('../models/role');
 const User = require('../models/user');
 const ErrorHandler = require('../utils/errorHandler')
 
+
+exports.getRoles = async (req, res, next) => {
+  try {
+    // Fetch all roles from the database
+    const roles = await Role.find();
+
+    res.status(200).json({ roles });
+  } catch (error) {
+    console.error('Error fetching roles:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 exports.createRole = async (req, res, next) => {
   const { role_name, isAllowedToDelete } = req.body;
 

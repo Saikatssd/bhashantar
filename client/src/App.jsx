@@ -18,11 +18,14 @@ import store from "./store/store";
 import Register from "./Pages/Register";
 import Permission from "./Pages/Permission";
 import Home from "./Pages/SuperAdmin/Home";
-import RoleManage from "./Pages/RoleManage";
+import PermissionManage from "./Pages/PermissionManage";
+import RoleManage from "./Pages/PermissionManage";
+import RoleManagement from "./Pages/RoleManagement";
+import UserManagement from "./Pages/userManagement";
 
 function App() {
   const { isAuthenticated } = useSelector((state) => state.auth);
-
+  const companyId = "6678812c8514f813f398d231";
   // const role='superadmin';
 
   const dispatch = useDispatch();
@@ -46,7 +49,10 @@ function App() {
           <Route path="/workspace" element={<Workspace />} />
           <Route path="/register" element={<Register />}></Route>
           <Route path="/permission" element={<Permission />}></Route>
-          <Route path="/roleManage" element={<RoleManage />}></Route>
+          <Route path="/permissionManage" element={<PermissionManage />}></Route>
+          <Route path="/roleManage" element={<RoleManagement />} />
+          <Route path="/userManage" element={<UserManagement companyId={companyId} />} />
+
           <Route path="*" element={<Navigate to="/choose" />}></Route>
         </Routes>
         // isAuthenticated ? (
