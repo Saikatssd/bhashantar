@@ -1,11 +1,10 @@
-const User = require('../models/user');
-const Role = require('../models/role');
-const Company = require('../models/CompanySchema');
+const User = require("../models/user");
+const Role = require("../models/role");
+const Company = require("../models/CompanySchema");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcryptjs');
-const sendCookie = require('../utils/sendCookie');
-const ErrorHandler = require('../utils/errorHandler');
-
+const bcrypt = require("bcryptjs");
+const sendCookie = require("../utils/sendCookie");
+const ErrorHandler = require("../utils/errorHandler");
 
 exports.register = async (req, res, next) => {
   // const { name, email, password, role_name, companyId } = req.body;
@@ -27,13 +26,12 @@ exports.register = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Check if the companyName exists
-    if(companyName){
-      
-    }
-    const company = await Company.findOne({ name: companyName });
-    if (!company) {
-      return next(new ErrorHandler("Company not found", 400));
-    }
+    // if (companyName) {
+    // }
+    // const company = await Company.findOne({ name: companyName });
+    // if (!company) {
+    //   return next(new ErrorHandler("Company not found", 400));
+    // }
 
     // Create a new user
     user = await User.create({
@@ -41,33 +39,31 @@ exports.register = async (req, res, next) => {
       email,
       password: hashedPassword,
       role: role._id,
-      companyId: company ? company._id : null,
-      // companyId:  null,
+      // companyId: company ? company._id : null,
+      companyId: null,
     });
-    if (role_name == 'admin') {
-      company.admin.push(user._id);
-    }
+    // if (role_name == "admin") {
+    //   company.admin.push(user._id);
+    // }
 
-    company.user.push(user._id);
+    // company.user.push(user._id);
 
-    await company.save();
+    // await company.save();
 
     sendCookie(user._id, role_name, res, "Registered Successfully", 201);
-
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-
 exports.login = async (req, res, next) => {
   try {
-
-
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).select("+password").populate('role');
+    const user = await User.findOne({ email })
+      .select("+password")
+      .populate("role");
     if (!user) {
       return next(new ErrorHandler("User Not found", 400));
     }
@@ -78,18 +74,22 @@ exports.login = async (req, res, next) => {
       return next(new ErrorHandler("Invalid Email or Password", 400));
     }
 
-    sendCookie(user._id, user.role.role_name, res, `Welcome back, ${user.name}`, 200);
-
+    sendCookie(
+      user._id,
+      user.role.role_name,
+      res,
+      `Welcome back, ${user.name}`,
+      200
+    );
   } catch (error) {
     next(error);
     // res.status(500).json({ message: 'Server error' });
   }
 };
 
-
 exports.getUserProfile = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user._id).populate('role');
+    const user = await User.findById(req.user._id).populate("role");
 
     if (!user) {
       return next(new ErrorHandler("User Not found", 400));
@@ -109,9 +109,9 @@ exports.getUserProfile = async (req, res, next) => {
   }
 };
 
-
 exports.updateUser = async (req, res, next) => {
-  const { userId, name, email, password, role_name, companyName, isActive } = req.body;
+  const { userId, name, email, password, role_name, companyName, isActive } =
+    req.body;
 
   try {
     // Find the user by ID
@@ -134,7 +134,6 @@ exports.updateUser = async (req, res, next) => {
         return next(new ErrorHandler("Role Not Found", 400));
       }
       user.role = role._id;
-
     }
 
     // Check if the companyName exists if provided
@@ -144,7 +143,7 @@ exports.updateUser = async (req, res, next) => {
         return next(new ErrorHandler("Company not found", 400));
       }
       user.companyId = company._id;
-      if (role_name == 'admin') {
+      if (role_name == "admin") {
         company.admin.push(user._id);
       }
       company.user.push(user._id);
@@ -154,20 +153,21 @@ exports.updateUser = async (req, res, next) => {
     // Save the updated user
     const updatedUser = await user.save();
 
-    res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+    res
+      .status(200)
+      .json({ message: "User updated successfully", user: updatedUser });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
 
 exports.deleteUser = async (req, res, next) => {
   const { userId } = req.body;
 
   try {
     // Find the user by ID
-    const user = await User.findById(userId).populate('role');
+    const user = await User.findById(userId).populate("role");
     if (!user) {
       return next(new ErrorHandler("User Not Found", 404));
     }
@@ -176,10 +176,12 @@ exports.deleteUser = async (req, res, next) => {
     if (user.companyId) {
       const company = await Company.findById(user.companyId);
       if (company) {
-        if (user.role.role_name == 'admin') {
-          company.admin = company.admin.filter(admin => !admin.equals(userId));
+        if (user.role.role_name == "admin") {
+          company.admin = company.admin.filter(
+            (admin) => !admin.equals(userId)
+          );
         }
-        company.user = company.user.filter(user => !user.equals(userId));
+        company.user = company.user.filter((user) => !user.equals(userId));
         await company.save();
       }
     }
@@ -187,10 +189,10 @@ exports.deleteUser = async (req, res, next) => {
     // Delete the user
     await User.findByIdAndDelete(userId);
 
-    res.status(200).json({ message: 'User deleted successfully' });
+    res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -202,7 +204,6 @@ exports.getAllUser = async (req, res) => {
     users,
   });
 };
-
 
 exports.logout = (req, res) => {
   res
@@ -217,9 +218,6 @@ exports.logout = (req, res) => {
       user: req.user,
     });
 };
-
-
-
 
 exports.isAuthenticated = async (req, res, next) => {
   try {
@@ -248,9 +246,6 @@ exports.isAuthenticated = async (req, res, next) => {
     return next(new ErrorHandler("Invalid token, please log in again", 401));
   }
 };
-
-
-
 
 // const User = require('../models/user');
 // const jwt = require("jsonwebtoken");
@@ -284,9 +279,6 @@ exports.isAuthenticated = async (req, res, next) => {
 //   }
 // };
 
-
-
-
 // exports.register = async (req, res, next) => {
 //   const { name, email, password, role } = req.body;
 
@@ -296,7 +288,6 @@ exports.isAuthenticated = async (req, res, next) => {
 //     if (user) {
 //       return next(new ErrorHandler("User Already Exist", 400));
 //     }
-
 
 //     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -326,7 +317,6 @@ exports.isAuthenticated = async (req, res, next) => {
 //   }
 // }
 
-
 // exports.logout = (req, res) => {
 //   res
 //     .status(200)
@@ -340,9 +330,6 @@ exports.isAuthenticated = async (req, res, next) => {
 //       user: req.user,
 //     });
 // };
-
-
-
 
 // exports.isAuthenticated = async (req, res, next) => {
 //   try {
@@ -371,16 +358,3 @@ exports.isAuthenticated = async (req, res, next) => {
 //     return next(new ErrorHandler("Invalid token, please log in again", 401));
 //   }
 // };
-
-
-
-
-
-
-
-
-
-
-
-
-

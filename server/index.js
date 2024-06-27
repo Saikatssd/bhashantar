@@ -2,14 +2,12 @@ require("dotenv").config({ path: "./config.env" });
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const cookieParser = require('cookie-parser');
-const authRoutes = require("./routes/authRoutes")
-const errorMiddlware = require("./middleware/errorMiddleware.js")
+const cookieParser = require("cookie-parser");
+const authRoutes = require("./routes/authRoutes");
+const errorMiddlware = require("./middleware/errorMiddleware.js");
 // const initializeDefaults = require('./utils/seeder.js')
-const connectDatabase = require('./Database/Database.js')
+const connectDatabase = require("./Database/Database.js");
 
-
-//for ssd
 connectDatabase();
 
 const app = express();
@@ -28,22 +26,6 @@ app.use(cookieParser());
 app.use("/users", authRoutes);
 
 app.use(errorMiddlware);
-
-
-// const DB_URI =
-//   "mongodb+srv://debmalya:skCH6Mf2bRrhbOSq@cluster0.ue55gpc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-
-// mongoose.connect(DB_URI, {})
-//   .then((connection) => {
-//     console.log('MongoDB Database connected with HOST:', connection.connection.host);
-//      initializeDefaults();
-//   })
-//   .catch((error) => {
-//     console.error('Error connecting to the database:', error.message);
-//   });
-
-
-
 
 app.get("/", (req, res) => {
   res.send("Backend is Running Successfully");

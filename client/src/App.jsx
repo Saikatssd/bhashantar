@@ -42,35 +42,22 @@ function App() {
     <Router>
       <AppBar />
       {
-        <Routes>
-          <Route path="/shome" element={<Home />} />
+        isAuthenticated ? (
+          <Routes>
+            <Route path="/shome" element={<Home/>} />
 
-          <Route path="/choose" element={<Choose />} />
-          <Route path="/workspace" element={<Workspace />} />
-          <Route path="/register" element={<Register />}></Route>
-          <Route path="/permission" element={<Permission />}></Route>
-          <Route path="/permissionManage" element={<PermissionManage />}></Route>
-          <Route path="/roleManage" element={<RoleManagement />} />
-          <Route path="/userManage" element={<UserManagement companyId={companyId} />} />
-
-          <Route path="*" element={<Navigate to="/choose" />}></Route>
-        </Routes>
-        // isAuthenticated ? (
-        //   <Routes>
-        //     <Route path="/shome" element={<Home/>} />
-
-        //     <Route path="/choose" element={<Choose />} />
-        //     <Route path="/workspace" element={<Workspace />} />
-        //     <Route path="/register" element={<Register />}></Route>
-        //     <Route path="/permission" element={<Permission/>}></Route>
-        //     <Route path="/roleMange" element={<RoleManage/>}></Route>
-        //     <Route path="*" element={<Navigate to="/choose" />}></Route>
-        //   </Routes>) :
-        //   //Logged out Routes
-        //   (<Routes>
-        //     <Route path="/" element={<Login />} />
-        //     <Route path="*" element={<Navigate to="/" />}></Route>
-        //   </Routes>)
+            <Route path="/choose" element={<Choose />} />
+            <Route path="/workspace" element={<Workspace />} />
+            <Route path="/register" element={<Register />}></Route>
+            <Route path="/permission" element={<Permission/>}></Route>
+            <Route path="/roleMange" element={<RoleManage/>}></Route>
+            <Route path="*" element={<Navigate to="/choose" />}></Route>
+          </Routes>) :
+          //Logged out Routes
+          (<Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="*" element={<Navigate to="/" />}></Route>
+          </Routes>)
       }
 
       {/* <Routes>
@@ -84,5 +71,5 @@ function App() {
     </Router>
   );
 }
-
+w
 export default App;
