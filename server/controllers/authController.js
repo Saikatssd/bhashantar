@@ -8,7 +8,7 @@ const ErrorHandler = require("../utils/errorHandler");
 
 exports.register = async (req, res, next) => {
   // const { name, email, password, role_name, companyId } = req.body;
-  const { name, email, password, role_name, companyName } = req.body;
+  const { name, email, password, role_name, company_name } = req.body;
   try {
     let user = await User.findOne({ email });
 
@@ -25,13 +25,14 @@ exports.register = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Check if the companyName exists
-    // if (companyName) {
-    // }
-    // const company = await Company.findOne({ name: companyName });
-    // if (!company) {
-    //   return next(new ErrorHandler("Company not found", 400));
-    // }
+    // Check if the company_name exists
+    if (company_name) {
+
+    }
+    const company = await Company.findOne({ name: company_name });
+    if (!company) {
+      return next(new ErrorHandler("Company not found", 400));
+    }
 
     // Create a new user
     user = await User.create({
@@ -39,16 +40,16 @@ exports.register = async (req, res, next) => {
       email,
       password: hashedPassword,
       role: role._id,
-      // companyId: company ? company._id : null,
-      companyId: null,
+      companyId: company ? company._id : null,
+      // companyId: null,
     });
-    // if (role_name == "admin") {
-    //   company.admin.push(user._id);
-    // }
+    if (role_name == "admin") {
+      company.admin.push(user._id);
+    }
 
-    // company.user.push(user._id);
+    company.user.push(user._id);
 
-    // await company.save();
+    await company.save();
 
     sendCookie(user._id, role_name, res, "Registered Successfully", 201);
   } catch (err) {
@@ -110,8 +111,7 @@ exports.getUserProfile = async (req, res, next) => {
 };
 
 exports.updateUser = async (req, res, next) => {
-  const { userId, name, email, password, role_name, companyName, isActive } =
-    req.body;
+  const { userId, name, email, password, role_name, company_name, isActive } = req.body;
 
   try {
     // Find the user by ID
@@ -136,9 +136,9 @@ exports.updateUser = async (req, res, next) => {
       user.role = role._id;
     }
 
-    // Check if the companyName exists if provided
-    if (companyName) {
-      const company = await Company.findOne({ name: companyName });
+    // Check if the company_name exists if provided
+    if (company_name) {
+      const company = await Company.findOne({ name: company_name });
       if (!company) {
         return next(new ErrorHandler("Company not found", 400));
       }

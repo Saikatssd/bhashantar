@@ -55,7 +55,7 @@ export const register = createAsyncThunk(
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${document.cookie.replace('token=', '')}`,
+          // 'Authorization': `Bearer ${document.cookie.replace('token=', '')}`,
         },
       };
 

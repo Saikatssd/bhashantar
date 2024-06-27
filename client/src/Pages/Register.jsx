@@ -324,36 +324,74 @@ const Register = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [formData, setFormData] = useState({
     name: "",
+    company_name: "",
     email: "",
     password: "",
-    role: "user", // Default role is user
+    role_name: "user",
   });
 
-  const { name, email, password, role } = formData;
-  const userToken = Cookies.get("token"); // Assuming token is stored in a cookie
+  const { name, company_name, email, password, role_name } = formData;
+  const userToken = Cookies.get("token");
 
+  //axios debug
+  // axios.interceptors.request.use(request => {
+  //   console.log('Starting Request', JSON.stringify(request, null, 2))
+  //   return request
+  // })
+
+  // axios.interceptors.response.use(response => {
+  //   console.log('Response:', JSON.stringify(response, null, 2))
+  //   return response
+  // })
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   // Handle loading state (optional)
+  //   if (loading) {
+  //     return;
+  //   }
+
+  //   try {
+  //     console.log(formData)
+  //     const response = await dispatch(register(formData));
+  //     console.log(response)
+  //     // if(response.success.data)
+  //     {
+  //       setAlertVisible(true);
+  //       setAlertMessage("Registration successful!");
+  //     }
+  //     setFormData({ name: "", email: "", password: "", role: "user" }); // Reset form data
+  //   } catch (error) {
+  //     console.log(error);
+  //     console.error(error);
+  //     setAlertVisible(true);
+  //     setAlertMessage("Registration failed. Please try again.");
+  //   }
+  // };
+
+
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    // Handle loading state (optional)
-    if (loading) {
-      return; // Prevent duplicate requests
-    }
-
     try {
-      const response = await dispatch(register(formData)); // Dispatch register action
-      setAlertVisible(true);
-      setAlertMessage("Registration successful!");
-      setFormData({ name: "", email: "", password: "", role: "user" }); // Reset form data
+      console.log(formData)
+      const res = await axios.post(`${server}/users/register`, formData, {
+        headers: {
+          // Authorization: `Bearer ${document.cookie.replace('token=', '')}`,
+          // Authorization: `Bearer ${userToken}`,
+          'Content-Type': 'application/json',
+
+        },
+        // withCredentials: true,
+      });
+      console.log(res.data);
     } catch (error) {
-      console.error(error); // Log errors for debugging
-      setAlertVisible(true);
-      setAlertMessage("Registration failed. Please try again.");
+      console.log("error", error);
     }
   };
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -386,112 +424,115 @@ const Register = () => {
           </div>
         </Grid>
         <Grid item xs={12} sm={6} md={8}>
-        <h1 className="text-4xl font-bold text-center tracking-tight text-gray-900 sm:text-3xl mb-10">
-              Register new User
-            </h1>
-        <main
-      className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6"
-    >
-                    
-      <div className="max-w-xl lg:max-w-3xl">
-      {alertVisible && (
-                  <Alert
-                    severity={error ? "error" : "success"}
-                    onClose={() => setAlertVisible(false)}
+          <h1 className="text-4xl font-bold text-center tracking-tight text-gray-900 sm:text-3xl mb-10">
+            Register new User
+          </h1>
+          <main
+            className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6"
+          >
+
+            <div className="max-w-xl lg:max-w-3xl">
+              {alertVisible && (
+                <Alert
+                  severity={error ? "error" : "success"}
+                  onClose={() => setAlertVisible(false)}
+                >
+                  <AlertTitle>{error ? "Error" : "Success"}</AlertTitle>
+                  {alertMessage}
+                </Alert>
+              )}
+              <form onSubmit={onSubmit} className="mt-8 grid grid-cols-6 gap-6">
+                <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="FirstName" className="block text-sm font-medium text-gray-700">
+                    Name
+                  </label>
+
+                  <input
+                    type="text"
+                    name="name"
+                    value={name}
+                    onChange={onChange}
+                    required
+                    id="name"
+                    className="mt-1 px-2 py-1.5 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  />
+                </div>
+
+                <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="Name" className="block text-sm font-medium text-gray-700">
+                    Company Name
+                  </label>
+
+                  <input
+                    type="text"
+                    id="company_name"
+                    name="company_name"
+                    value={company_name}
+                    onChange={onChange}
+                    required
+                    className="mt-1 px-2 py-1.5 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  />
+                </div>
+
+                <div className="col-span-6">
+                  <label htmlFor="Email" className="block text-sm font-medium text-gray-700"> Email </label>
+
+                  <input
+                    type="email"
+                    id="Email"
+                    name="email"
+                    value={email}
+                    onChange={onChange}
+                    required
+                    className="mt-1 px-2 py-1.5 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  />
+                </div>
+
+                <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="Password" className="block text-sm font-medium text-gray-700"> Password </label>
+
+                  <input
+                    type="password"
+                    name="password"
+                    value={password}
+                    onChange={onChange}
+                    required
+                    id="password"
+                    className="mt-1 px-2 py-1.5 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  />
+                </div>
+
+                <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="PasswordConfirmation" className="block text-sm font-medium text-gray-700">
+                    Password Confirmation
+                  </label>
+
+                  <input
+                    type="password"
+                    id="PasswordConfirmation"
+                    name="password_confirmation"
+                    className="mt-1 px-2 py-1.5 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  />
+                </div>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-standard-label">Role</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="role demo-simple-select-standard"
+                    name="role_name"
+                    value={role_name}
+                    onChange={onChange}
+                    label="role_name"
                   >
-                    <AlertTitle>{error ? "Error" : "Success"}</AlertTitle>
-                    {alertMessage}
-                  </Alert>
-                )}
-        <form onSubmit={onSubmit} className="mt-8 grid grid-cols-6 gap-6">
-          <div className="col-span-6 sm:col-span-3">
-            <label htmlFor="FirstName" className="block text-sm font-medium text-gray-700">
-              First Name
-            </label>
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="user">User</MenuItem>
+                    <MenuItem value="admin">Admin</MenuItem>
+                  </Select>
+                </FormControl>
 
-            <input
-              type="text"
-              name="name"
-              value={name}
-              onChange={onChange}
-              required
-              id="name"
-              className="mt-1 px-2 py-1.5 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-            />
-          </div>
-
-          <div className="col-span-6 sm:col-span-3">
-            <label htmlFor="LastName" className="block text-sm font-medium text-gray-700">
-              Last Name
-            </label>
-
-            <input
-              type="text"
-              id="LastName"
-              name="last_name"
-              className="mt-1 px-2 py-1.5 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-            />
-          </div>
-
-          <div className="col-span-6">
-            <label htmlFor="Email" className="block text-sm font-medium text-gray-700"> Email </label>
-
-            <input
-              type="email"
-              id="Email"
-              name="email"
-              value={email}
-                      onChange={onChange}
-                      required
-              className="mt-1 px-2 py-1.5 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-            />
-          </div>
-
-          <div className="col-span-6 sm:col-span-3">
-            <label htmlFor="Password" className="block text-sm font-medium text-gray-700"> Password </label>
-
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={onChange}
-              required
-              id="password"
-              className="mt-1 px-2 py-1.5 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-            />
-          </div>
-
-          <div className="col-span-6 sm:col-span-3">
-            <label htmlFor="PasswordConfirmation" className="block text-sm font-medium text-gray-700">
-              Password Confirmation
-            </label>
-
-            <input
-              type="password"
-              id="PasswordConfirmation"
-              name="password_confirmation"
-              className="mt-1 px-2 py-1.5 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-            />
-          </div>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-standard-label">Role</InputLabel>
-        <Select
-          labelId="demo-simple-select-standard-label"
-          id="role demo-simple-select-standard"
-          name="role"
-                      value={role}
-                      onChange={onChange}
-          label="Age"
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="user">User</MenuItem>
-          <MenuItem value="admin">Admin</MenuItem>
-        </Select>
-      </FormControl>
-
-          {/* <div className="col-span-6 sm:col-span-3">
+                {/* <div className="col-span-6 sm:col-span-3">
                     <label htmlFor="role" className="block text-sm font-medium text-gray-700">Role</label>
                     <select
                       name="role"
@@ -509,25 +550,25 @@ const Register = () => {
                   </div> */}
 
 
-          <div className="col-span-6">
-            <p className="text-sm text-gray-500">
-              By creating an account, you agree to our
-              <a href="#" className="text-gray-700 underline"> terms and conditions </a>
-              and
-              <a href="#" className="text-gray-700 underline">privacy policy</a>.
-            </p>
-          </div>
+                <div className="col-span-6">
+                  <p className="text-sm text-gray-500">
+                    By creating an account, you agree to our
+                    <a href="#" className="text-gray-700 underline"> terms and conditions </a>
+                    and
+                    <a href="#" className="text-gray-700 underline">privacy policy</a>.
+                  </p>
+                </div>
 
-          <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-            <button
-              className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
-            >
-              Create an account
-            </button>
-          </div>
-        </form>
-      </div>
-    </main>
+                <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
+                  <button
+                    className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                  >
+                    Create an account
+                  </button>
+                </div>
+              </form>
+            </div>
+          </main>
         </Grid>
       </Grid>
     </Box>

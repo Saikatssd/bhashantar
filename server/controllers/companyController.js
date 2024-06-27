@@ -7,15 +7,28 @@ const bcrypt = require('bcrypt');
 const sendCookie = require('../utils/sendCookie');
 
 exports.createCompany = async (req, res, next) => {
-    const { companyName, adminName, adminEmail, adminPassword, adminRoleName } = req.body;
+    const { company_name, adminName, adminEmail, adminPassword, adminRoleName } = req.body;
 
     try {
+        if (!company_name) {
+            return next(new ErrorHandler("Company Name is Required", 400));
+          }
+       
+        if (company_name) {
+            const company = await Company.findOne({ name: company_name });
+            if (company) {
+              return next(new ErrorHandler("Company Name Already Exists", 400));
+            }   
+        }    
         // Check if the role exists
         const adminRole = await Role.findOne({ role_name: adminRoleName });
         // console.log("admin role", adminRole)
         if (!adminRole) {
             return next(new ErrorHandler("Admin Role Not Found", 400));
         }
+
+       
+    
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(adminPassword, 10);
@@ -31,7 +44,7 @@ exports.createCompany = async (req, res, next) => {
 
         // Create the company with the admin user
         const newCompany = await Company.create({
-            name: companyName,
+            name: company_name,
             admin: [adminUser._id],
             user: [adminUser._id],
         });
@@ -43,8 +56,7 @@ exports.createCompany = async (req, res, next) => {
 
         sendCookie(adminUser._id, adminRole.role_name, res, "Company and Admin User Created Successfully", 201);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Internal Server Error' });
+        next(err)
     }
 };
 
