@@ -42,13 +42,15 @@
 
 require("dotenv").config({ path: "./config.env" });
 const express = require("express");
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authRoutes");
+const projectRoutes = require("./routes/projectRoutes");
+const documentRoutes = require("./routes/documentRoutes.js");
 const errorMiddlware = require("./middleware/errorMiddleware.js");
 const connectDatabase = require("./Database/Database.js");
-const Document = require("./models/Document.js");
+const Document = require("./models/document.js");
 
 connectDatabase();
 
@@ -66,6 +68,8 @@ app.use(express.urlencoded({ extended: true, limit: "30kb" }));
 app.use(cookieParser());
 
 app.use("/users", authRoutes);
+app.use("/project", projectRoutes);
+app.use("/document", documentRoutes);
 
 app.use(errorMiddlware);
 

@@ -13,6 +13,8 @@ export const setAuthToken = token => {
   }
 };
 
+
+
 export const login = createAsyncThunk(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
@@ -79,44 +81,6 @@ export const register = createAsyncThunk(
 );
 
 
-// export const loadUser = createAsyncThunk(
-//   'auth/loadUser',
-//   async (token, { rejectWithValue }) => {
-//     try {
-//       const response = await fetch(`${server}/users/profile`, {
-//         headers: {
-//           Authorization: `Bearer ${token}`, 
-//         },
-//       });
-
-//       if (!response.ok) {
-//         throw new Error('Failed to fetch user data');
-//       }
-
-//       const data = await response.json();
-//       return data;
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
-
-
-
-
-
-// export const loadUser = createAsyncThunk(
-//   'auth/loadUser',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await axios.get(`${server}/users/profile`);
-//       console.log(response)
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data.message);
-//     }
-//   }
-// );
 
 export const loadUser = createAsyncThunk(
   'auth/loadUser',
@@ -126,7 +90,7 @@ export const loadUser = createAsyncThunk(
         withCredentials: true,
       });
 
-      // console.log(response);
+      console.log(response);
       return response.data;
     } catch (error) {
       if (error.response) {

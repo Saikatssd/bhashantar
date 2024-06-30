@@ -34,7 +34,7 @@ router.get('/logout', authController.isAuthenticated, authController.logout);
 router.post("/createRole", roleController.createRole);
 router.get("/getRoles", roleController.getRoles);
 router.put("/updateRole/:roleId", roleController.updateRole);
-router.delete("/deleteRole", roleController.deleteRole);
+router.post("/deleteRole", roleController.deleteRole);
 
 
 router.put("/permission",  permissionController.permission);

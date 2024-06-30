@@ -6,13 +6,16 @@ export default function Choose() {
 
     const { user } = useSelector(
         (state) => state.auth);
+        
+
     console.log("user", user);
+    console.log("user name", user.name);
 
     return (
         <div className="h-screen flex flex-col items-center">
-            {/* <h1 className='text-gray-800 m-10 font-semibold text-xl text-primary'>
+            <h1 className='text-gray-800 m-10 font-semibold text-xl text-primary'>
                 Hi,{user.role === ('admin' || 'superadmin') ? (<span className='uppercase text-gray-500'>{user.role} </span>) : (<></>)} {user.name}
-            </h1> */}
+            </h1>
 
 
             <div className="flex justify-center items-center p-20">

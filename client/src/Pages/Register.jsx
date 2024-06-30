@@ -330,7 +330,7 @@ const Register = () => {
     role_name: "user",
   });
 
-  const { name, company_name, email, password, role_name } = formData;
+  const { name, email, password, role_name, company_name } = formData;
   const userToken = Cookies.get("token");
 
   //axios debug
@@ -373,22 +373,53 @@ const Register = () => {
   // };
 
 
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     console.log(formData)
+  //     const res = await axios.post(`${server}/users/register`, formData, {
+  //       headers: {
+  //         // Authorization: `Bearer ${document.cookie.replace('token=', '')}`,
+  //         // Authorization: `Bearer ${userToken}`,
+  //         'Content-Type': 'application/json',
+
+  //       },
+  //       // withCredentials: true,
+  //     });
+  //     console.log("response",res.data);
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData)
       const res = await axios.post(`${server}/users/register`, formData, {
         headers: {
-          // Authorization: `Bearer ${document.cookie.replace('token=', '')}`,
-          // Authorization: `Bearer ${userToken}`,
           'Content-Type': 'application/json',
-
         },
-        // withCredentials: true,
       });
-      console.log(res.data);
+      console.log("response", res.data);
+      setAlertMessage("Registered Successfully");
+      setAlertVisible(true);
+      setFormData({ name: "", email: "", password: "", role: "user" });
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
+      if (error.response) {
+
+        const errorMessage = error.response.data.message || error.response.data.error;
+        setAlertMessage(errorMessage || "An error occurred during registration");
+        setAlertVisible(true);
+      } else if (error.request) {
+
+        setAlertMessage("Network error. Please check your connection and try again.");
+        setAlertVisible(true);
+      } else {
+        console.error('Error', error.message);
+        setAlertMessage("An unexpected error occurred. Please try again later.");
+        setAlertVisible(true);
+      }
     }
   };
 
@@ -437,10 +468,16 @@ const Register = () => {
                   severity={error ? "error" : "success"}
                   onClose={() => setAlertVisible(false)}
                 >
-                  <AlertTitle>{error ? "Error" : "Success"}</AlertTitle>
+                  <AlertTitle>{error ? "error" : "success"}</AlertTitle>
                   {alertMessage}
                 </Alert>
               )}
+              {/* {alertVisible && (
+                <Alert severity="error" onClose={() => setAlertVisible(false)}>
+                  <AlertTitle>Error</AlertTitle>
+                  {alertMessage}
+                </Alert>
+              )} */}
               <form onSubmit={onSubmit} className="mt-8 grid grid-cols-6 gap-6">
                 <div className="col-span-6 sm:col-span-3">
                   <label htmlFor="FirstName" className="block text-sm font-medium text-gray-700">

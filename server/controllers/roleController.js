@@ -33,8 +33,6 @@ exports.createRole = async (req, res, next) => {
       isAllowedToDelete: isAllowedToDelete !== undefined ? isAllowedToDelete : true,
     });
 
-
-
     res.status(201).json({ message: 'Role created successfully', role: newRole });
   } catch (err) {
     console.error(err);
@@ -47,11 +45,13 @@ exports.createRole = async (req, res, next) => {
 exports.updateRole = async (req, res, next) => {
   const { role_name, isAllowedToDelete, isActive } = req.body;
   const { roleId } = req.params;
+  // console.log("roleId",roleId)
+  // const { roleId } = req.body;
 
   try {
-    if (role_name === 'admin' || 'superAdmin' || 'user') {
-      return next(new ErrorHandler("Default Roles cannot be changed ", 405));
-    }
+    // if (role_name === 'admin' || 'superAdmin' || 'user') {
+    //   return next(new ErrorHandler("Default Roles cannot be changed ", 405));
+    // }
     let role = await Role.findById(roleId);
 
     if (!role) {
@@ -75,38 +75,34 @@ exports.updateRole = async (req, res, next) => {
 };
 
 
+
 exports.deleteRole = async (req, res, next) => {
-  const { role_name } = req.body;
+  const { roleId } = req.body;
 
   try {
-    if (role_name === 'admin' || 'superAdmin' || 'user') {
-      return next(new ErrorHandler("Default Roles cannot be deleled ", 405));
-    }
-    // Find the role by role_name
-    const roleToDelete = await Role.findOne({ role_name });
-    if (!roleToDelete) {
+    // Find the role by ID
+    const role = await Role.findById(roleId);
+    if (!role) {
       return next(new ErrorHandler("Role Not Found", 404));
     }
 
-    // Find the 'user' role to set as default
-    const userRole = await Role.findOne({ role_name: 'user' });
-    if (!userRole) {
-      return next(new ErrorHandler("'user' Role Not Found", 404));
+    // Check if the role is allowed to be deleted
+    if (!role.isAllowedToDelete) {
+      return next(new ErrorHandler("This role cannot be deleted", 403));
     }
 
-    // Find all users with the role to be deleted
-    const usersToUpdate = await User.find({ role: roleToDelete._id });
+    // Find all users associated with the role to be deleted
+    const users = await User.find({ role: role._id });
 
-    // Update all users' role to 'user'
-    for (let user of usersToUpdate) {
-      user.role = userRole._id;
-      await user.save();
+    // Delete all users associated with this role
+    for (let user of users) {
+      await User.findByIdAndDelete(user._id);
     }
 
     // Delete the role
-    await Role.findByIdAndDelete(roleToDelete._id);
+    await Role.findByIdAndDelete(roleId);
 
-    res.status(200).json({ message: 'Role deleted successfully and users updated' });
+    res.status(200).json({ message: 'Role and associated users deleted successfully' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Internal Server Error' });

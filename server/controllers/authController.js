@@ -1,6 +1,6 @@
 const User = require("../models/user");
 const Role = require("../models/role");
-const Company = require("../models/CompanySchema");
+const Company = require("../models/companySchema");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const sendCookie = require("../utils/sendCookie");
@@ -26,11 +26,11 @@ exports.register = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Check if the company_name exists
-    if (company_name) {
+    // if (company_name) {
 
-    }
+    // }
     const company = await Company.findOne({ name: company_name });
-    if (!company) {
+    if (!company && company_name) {
       return next(new ErrorHandler("Company not found", 400));
     }
 

@@ -7,7 +7,7 @@ import Cookies from "js-cookie"
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: null,
+    user: {},
     token: localStorage.getItem('token') || null,
     isAuthenticated: !!localStorage.getItem('token'),
     loading: false,
