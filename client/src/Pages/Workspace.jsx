@@ -65,6 +65,25 @@ const row3 = [
 ];
 
 
+const assignDocument = async (e) => {
+  e.preventDefault();
+  if (!selectedUser) {
+    return alert('Please select a user');
+  }
+
+  try {
+    const response = await axios.put(`/api/v1/documents/${document._id}/assign`, {
+      assignedTo: selectedUser,
+    });
+    console.log('Document assigned:', response.data);
+    // Handle successful assignment (e.g., update UI, close form)
+  } catch (err) {
+    console.error('Error assigning document:', err.message);
+    // Handle error (e.g., display error message)
+  }
+};
+
+
 function Workspace() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);

@@ -142,7 +142,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {server} from "../main"
+import { server } from "../main"
 
 const RoleManagement = () => {
   const [roles, setRoles] = useState([]);
@@ -156,7 +156,7 @@ const RoleManagement = () => {
 
   const fetchRoles = async () => {
     try {
-        const response = await axios.get(`${server}/users/getRoles`);
+      const response = await axios.get(`${server}/users/getRoles`);
       setRoles(response.data.roles);
     } catch (error) {
       console.error('Error fetching roles:', error);
@@ -165,7 +165,7 @@ const RoleManagement = () => {
 
   const createRole = async () => {
     try {
-        const response = await axios.post(`${server}/users/createRole`, { role_name: newRole, isAllowedToDelete });
+      const response = await axios.post(`${server}/users/createRole`, { role_name: newRole, isAllowedToDelete });
       setRoles([...roles, response.data.role]);
       setNewRole('');
       setIsAllowedToDelete(true);
@@ -175,10 +175,11 @@ const RoleManagement = () => {
     }
   };
 
-  const deleteRole = async (role_name) => {
+  const deleteRole = async (roleId) => {
     try {
-        await axios.delete(`${server}/users/deleteRole`,{role_name});
-      setRoles(roles.filter(role => role.role_name !== role_name));
+      await axios.post(`${server}/users/deleteRole`, { roleId });
+      fetchRoles();
+      // setRoles(roles.filter(role => role.role_name !== role_name));
     } catch (error) {
       console.error('Error deleting role:', error);
     }
@@ -186,13 +187,14 @@ const RoleManagement = () => {
 
   const updateRole = async (roleId) => {
     try {
-     await axios.delete(`${server}/users/updateRole/${roleId}`);
+      const response = await axios.put(`${server}/users/updateRole/${roleId}`,{role_name:selectedRole.role_name,isAllowedToDelete});
       const updatedRoles = roles.map(role => role._id === selectedRole._id ? response.data.role : role);
       setRoles(updatedRoles);
       setSelectedRole(null);
     } catch (error) {
       console.error('Error updating role:', error);
     }
+    
   };
 
   return (
@@ -242,7 +244,7 @@ const RoleManagement = () => {
                 </button>
                 <button
                   className="bg-red-500 text-white p-2"
-                  onClick={() => deleteRole(role.role_name)}
+                  onClick={() => deleteRole(role._id)}
                   disabled={!role.isAllowedToDelete}
                 >
                   Delete
@@ -252,8 +254,8 @@ const RoleManagement = () => {
           ))}
         </tbody>
       </table>
-
-      {selectedRole && (
+      {
+      selectedRole && (
         <div className="mt-6 p-6 bg-white border rounded">
           <h3 className="text-xl font-semibold mb-4">Edit Role</h3>
           <input
@@ -270,7 +272,7 @@ const RoleManagement = () => {
             />
             Allowed to Delete
           </label>
-          <button className="bg-green-500 text-white p-2" onClick={updateRole(roles._id)}>
+          <button className="bg-green-500 text-white p-2" onClick={() => {updateRole(selectedRole._id);}}>
             Update Role
           </button>
         </div>

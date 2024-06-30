@@ -1,5 +1,5 @@
 // controllers/companyController.js
-const Company = require('../models/CompanySchema');
+const Company = require('../models/companySchema');
 const User = require('../models/user');
 const Role = require('../models/role');
 const ErrorHandler = require('../utils/errorHandler');
