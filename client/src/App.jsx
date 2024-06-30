@@ -22,6 +22,9 @@ import PermissionManage from "./Pages/PermissionManage";
 import RoleManage from "./Pages/PermissionManage";
 import RoleManagement from "./Pages/RoleManagement";
 import UserManagement from "./Pages/userManagement";
+import Editor from "./Components/Editor";
+import { v4 as uuidV4 } from "uuid";
+
 
 function App() {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -41,24 +44,24 @@ function App() {
   return (
     <Router>
       <AppBar />
-      {
-        isAuthenticated ? (
-          <Routes>
-            <Route path="/shome" element={<Home/>} />
-
-            <Route path="/choose" element={<Choose />} />
-            <Route path="/workspace" element={<Workspace />} />
-            <Route path="/register" element={<Register />}></Route>
-            <Route path="/permission" element={<Permission/>}></Route>
-            <Route path="/roleMange" element={<RoleManage/>}></Route>
-            <Route path="*" element={<Navigate to="/choose" />}></Route>
-          </Routes>) :
-          //Logged out Routes
-          (<Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="*" element={<Navigate to="/" />}></Route>
-          </Routes>)
-      }
+      {isAuthenticated ? (
+        <Routes>
+          <Route path="/shome" element={<Home />} />
+          <Route path="/choose" element={<Choose />} />
+          <Route path="/workspace" element={<Workspace />} />
+          <Route path="/register" element={<Register />}></Route>
+          <Route path="/permission" element={<Permission />}></Route>
+          <Route path="/roleMange" element={<RoleManage />}></Route>
+          <Route path="/documents/:id" element={<Editor />}></Route>
+          <Route path="*" element={<Navigate to="/choose" />}></Route>
+        </Routes>
+      ) : (
+        //Logged out Routes
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="*" element={<Navigate to="/" />}></Route>
+        </Routes>
+      )}
 
       {/* <Routes>
         <Route path="/" element={<Login />} />
@@ -68,8 +71,14 @@ function App() {
         </Route>
         <Route path="*" element={<div>Page Not Found</div>} />
       </Routes> */}
+
+      <Routes>
+        <Route
+          path="/new"
+          element={<Navigate to={`/documents/${uuidV4()}`} replace />}
+        />
+      </Routes>
     </Router>
   );
 }
-w
 export default App;
