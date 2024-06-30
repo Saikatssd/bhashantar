@@ -93,7 +93,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await dispatch(login({ email, password }));
-    history.push('/home');
+    navigate('/home');
     // if (role === 'superadmin') {
     //   navigate('/shome')
     // }

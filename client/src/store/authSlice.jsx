@@ -1,13 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { register, login, loadUser } from './authActions'
+import { createSlice } from '@reduxjs/toolkit';
+import { login, register, loadUser } from './authActions';
 import { setAuthToken } from './authActions';
-import Cookies from "js-cookie"
-
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: {},
+    user: {
+      role: localStorage.getItem('role') || null,
+    },
     token: localStorage.getItem('token') || null,
     isAuthenticated: !!localStorage.getItem('token'),
     loading: false,
@@ -16,14 +16,11 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       localStorage.removeItem('token');
-      Cookies.remove('token');
+      localStorage.removeItem('role');
       setAuthToken(null);
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
-    },
-    setCredentials: (state, { payload }) => {
-      state.user = payload
     },
   },
   extraReducers: (builder) => {
@@ -37,13 +34,12 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.userToken;
         state.isAuthenticated = true;
-        // console.log("Login fulfiled Response:", action.payload);
+        localStorage.setItem('token', action.payload.userToken);
+        localStorage.setItem('role', action.payload.user.role);
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        // console.log("Login reject Response:", action.payload);
-
       })
       .addCase(register.pending, (state) => {
         state.loading = true;
@@ -62,8 +58,11 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loadUser.fulfilled, (state, action) => {
-        state.loading = false;
         state.user = action.payload;
+        console.log("Role from loadUser:", action.payload.role); // Log role
+        if (action.payload.role) {
+          localStorage.setItem('role', action.payload.role);
+        }
       })
       .addCase(loadUser.rejected, (state, action) => {
         state.loading = false;
@@ -72,5 +71,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, setCredentials } = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

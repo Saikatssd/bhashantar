@@ -5,7 +5,7 @@ import { server } from '../main';
 
 axios.defaults.withCredentials = true;
 
-export const setAuthToken = token => {
+export const setAuthToken = (token) => {
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   } else {
@@ -32,23 +32,21 @@ export const login = createAsyncThunk(
         config
       );
 
-      // console.log("Response", response);
-
       localStorage.setItem('token', response.data.userToken);
-      setAuthToken(response.data.userToken);
+      setAuthToken(response.data.userToken); // Set token for axios
 
-      return response.data;
+      return response.data; // Ensure the user object with role is returned
     } catch (error) {
-
       if (error.response) {
         return rejectWithValue(error.response.data.message);
       } else {
-        console.log("error",error)
+        console.error("Error:", error);
         return rejectWithValue('An unknown error occurred');
       }
     }
   }
 );
+
 
 export const register = createAsyncThunk(
   'auth/register',
@@ -57,7 +55,6 @@ export const register = createAsyncThunk(
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${document.cookie.replace('token=', '')}`,
         },
       };
 
@@ -67,18 +64,19 @@ export const register = createAsyncThunk(
         config
       );
 
-      return response.data;
+      return response.data; // Ensure the response contains user details if needed
     } catch (error) {
       if (error.response) {
-        console.log("error response", error.response)
+        console.error("Error response:", error.response);
         return rejectWithValue(error.response.data.message);
       } else {
-        console.log("error", error)
+        console.error("Error:", error);
         return rejectWithValue('An unknown error occurred');
       }
     }
   }
 );
+
 
 
 
@@ -90,14 +88,21 @@ export const loadUser = createAsyncThunk(
         withCredentials: true,
       });
 
-      console.log(response);
+      if (response.data.userToken) { // Ensure token is refreshed if needed
+        localStorage.setItem('token', response.data.userToken);
+        setAuthToken(response.data.userToken);
+      }
+
+      console.log("User profile loaded:", response.data); // Ensure user data is correct
       return response.data;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data.message);
       } else {
+        console.error("Error:", error);
         return rejectWithValue('An unknown error occurred');
       }
     }
   }
 );
+
