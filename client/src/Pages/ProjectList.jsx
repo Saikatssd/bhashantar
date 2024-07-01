@@ -4,6 +4,7 @@ import { server } from "../main";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import { Link } from 'react-router-dom';
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,15 +50,17 @@ const ProjectList = () => {
       {!isLoading && !error && (
         <div className="grid grid-cols-1 gap-20 md:grid-cols-4 p-4">
           {projects.map((project) => (
-            <div
-              className="folder p-6 max-w-sm bg-[#90ebf5] rounded-t-lg border-t-8 border-[#03518a] shadow-md hover:shadow-lg transition-shadow duration-300"
-              key={project._id}
-            >
-              <div className="folder-tab bg-[#03518a] p-2 rounded-t-lg"></div>
-              <div className="p-4 text-center">
-                {project.name}
+            <Link to='/workspace'>
+              <div
+                className="folder p-6 max-w-sm bg-[#90ebf5] rounded-t-lg border-t-8 border-[#03518a] shadow-md hover:shadow-lg transition-shadow duration-300"
+                key={project._id}
+              >
+                <div className="folder-tab bg-[#03518a] p-2 rounded-t-lg"></div>
+                <div className="p-4 text-center">
+                  {project.name}
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}
@@ -66,7 +69,7 @@ const ProjectList = () => {
         variant="extended"
         color="primary"
         size="large"
-        sx={{ position: 'fixed', bottom: 16, right: 16,width:'200px', height:'100px', fontSize:'18px' }}
+        sx={{ position: 'fixed', bottom: 25, right: 16, width: '200px', height: '75px', fontSize: '18px' }}
         onClick={() => setIsModalOpen(true)}
       >
         <AddIcon sx={{ mr: 1 }} />

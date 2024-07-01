@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const Home = () => {
+const SuperAdminHome = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const toggleSidebar = () => {
@@ -90,15 +91,17 @@ const Home = () => {
 
             {/* Main Content */}
             <div className="flex-grow p-6 ml-64 flex items-center ">
-                <div className="bg-indigo-200 shadow-md rounded-lg p-6 m-4 w-full max-w-xs">
+
+                <Link to='' className="bg-indigo-200 shadow-md rounded-lg p-6 m-4 w-full max-w-xs">
                     <h2 className="text-2xl font-semibold">Kyrotics</h2>
-                </div>
-                <div className="bg-indigo-200 shadow-md rounded-lg p-6 m-4 w-full max-w-xs">
+                </Link>
+
+                <Link to='' className="bg-indigo-200 shadow-md rounded-lg p-6 m-4 w-full max-w-xs">
                     <h2 className="text-2xl font-semibold">Client</h2>
-                </div>
+                </Link>
             </div>
         </div>
     );
 };
 
-export default Home;
+export default SuperAdminHome;

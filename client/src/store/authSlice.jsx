@@ -35,7 +35,10 @@ const authSlice = createSlice({
         state.token = action.payload.userToken;
         state.isAuthenticated = true;
         localStorage.setItem('token', action.payload.userToken);
+        // console.log("user from login fulfilled",action.payload.user)
         localStorage.setItem('role', action.payload.user.role);
+        // console.log("role from login fulfilled",action.payload.user.role)
+
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -58,10 +61,12 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loadUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        console.log("Role from loadUser:", action.payload.role); // Log role
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        // console.log("Role from loadUser:", action.payload.user.role); // Log role
         if (action.payload.role) {
-          localStorage.setItem('role', action.payload.role);
+          localStorage.setItem('role', action.payload.user.role);
         }
       })
       .addCase(loadUser.rejected, (state, action) => {

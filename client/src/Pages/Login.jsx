@@ -75,12 +75,7 @@ function Login() {
   useEffect(() => {
     if (isAuthenticated) {
       // navigate('/shome')
-      window.location.href = "/shome";
-      // if (role === 'superadmin') {
-      // }
-      // else {
-      //   navigate("/choose");
-      // }
+      window.location.href = "/home";
     }
     if (error) {
       setAlertMessage(error);
@@ -94,12 +89,6 @@ function Login() {
     e.preventDefault();
     await dispatch(login({ email, password }));
     navigate('/home');
-    // if (role === 'superadmin') {
-    //   navigate('/shome')
-    // }
-    // else {
-    //   navigate("/choose");
-    // }
   };
 
   return (
