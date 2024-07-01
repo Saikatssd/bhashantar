@@ -92,7 +92,7 @@ const SuperAdminHome = () => {
             {/* Main Content */}
             <div className="flex-grow p-6 ml-64 flex items-center ">
 
-                <Link to='' className="bg-indigo-200 shadow-md rounded-lg p-6 m-4 w-full max-w-xs">
+                <Link to='/adminHome' className="bg-indigo-200 shadow-md rounded-lg p-6 m-4 w-full max-w-xs">
                     <h2 className="text-2xl font-semibold">Kyrotics</h2>
                 </Link>
 
