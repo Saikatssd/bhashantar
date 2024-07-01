@@ -24,7 +24,7 @@ import Cookies from 'js-cookie';
 
 const drawerWidth = 240;
 const navItems = [
-  { text: 'Home', link: '/choose' },
+  { text: 'Home', link: '/home' },
   { text: 'About', link: '/about' },
   { text: 'Features', link: '/features' },
   { text: 'Contact', link: '/contact' },
@@ -84,9 +84,11 @@ function DrawerAppBar(props) {
           <img src={logo} alt="Bhashantaar Logo" style={{ height: '55px', width: 'auto', marginRight: '40px' }} />
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item.text} href={item.link} sx={{ fontWeight: 700, color: 'black', marginX: '5px' }}>
-                {item.text}
-              </Button>
+              <Link to={item.link}>
+                <Button key={item.text} sx={{ fontWeight: 700, color: 'black', marginX: '5px' }}>
+                  {item.text}
+                </Button>
+              </Link>
             ))}
             {isAuthenticated ? (
               <Button className="rounded-md" sx={{ fontWeight: 700, color: 'black', marginX: '5px' }} onClick={logoutHandler}>

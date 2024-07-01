@@ -31,7 +31,7 @@ export const login = createAsyncThunk(
         credentials,
         config
       );
-
+      // console.log("login response",response);
       localStorage.setItem('token', response.data.userToken);
       setAuthToken(response.data.userToken); // Set token for axios
 

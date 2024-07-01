@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link } from "react-router-dom";
 
-export default function Home() {
+export default function UserHome() {
     return (
         <div className="h-screen flex flex-col items-center">
             {/* <h1 className='text-gray-800 m-10 font-semibold text-xl text-primary'>
