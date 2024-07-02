@@ -26,6 +26,7 @@ module.exports = sendCookie = async (userId, role, res, message, statusCode = 20
                 _id: user._id,
                 role,
                 email:user.email,
+                companyId:user.companyId,
             },
             message,
             userToken: token,

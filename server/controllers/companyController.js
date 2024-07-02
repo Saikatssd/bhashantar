@@ -65,6 +65,9 @@ exports.getCompanyUsersAndAdmins = async (req, res, next) => {
     const { companyId } = req.params;
   
     try {
+        if(!companyId){
+        return next(new ErrorHandler("Invalid CompanyId", 404));
+        }
       // Find the company by ID
       const company = await Company.findById(companyId).populate('admin user');
   

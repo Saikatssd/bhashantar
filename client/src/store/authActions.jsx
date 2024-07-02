@@ -33,9 +33,9 @@ export const login = createAsyncThunk(
       );
       // console.log("login response",response);
       localStorage.setItem('token', response.data.userToken);
-      setAuthToken(response.data.userToken); // Set token for axios
+      setAuthToken(response.data.userToken); 
 
-      return response.data; // Ensure the user object with role is returned
+      return response.data; 
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.data.message);
@@ -64,7 +64,7 @@ export const register = createAsyncThunk(
         config
       );
 
-      return response.data; // Ensure the response contains user details if needed
+      return response.data; 
     } catch (error) {
       if (error.response) {
         console.error("Error response:", error.response);
@@ -88,12 +88,12 @@ export const loadUser = createAsyncThunk(
         withCredentials: true,
       });
 
-      if (response.data.userToken) { // Ensure token is refreshed if needed
+      if (response.data.userToken) { 
         localStorage.setItem('token', response.data.userToken);
         setAuthToken(response.data.userToken);
       }
 
-      console.log("User profile loaded:", response.data); // Ensure user data is correct
+      // console.log("User profile loaded:", response.data);
       return response.data;
     } catch (error) {
       if (error.response) {

@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 
-/* .bg-hero {
-    height: calc(100vh - 240px);
-} */
+.bg-hero {
+    height: calc(100vh - 300px);
+}

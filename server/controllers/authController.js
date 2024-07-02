@@ -103,6 +103,7 @@ exports.getUserProfile = async (req, res, next) => {
         name: user.name,
         email: user.email,
         role: user.role.role_name,
+        companyId:user.companyId,
       },
     });
   } catch (error) {

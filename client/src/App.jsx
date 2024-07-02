@@ -7,7 +7,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import Workspace from "./Pages/Workspace";
-import Choose from "./Pages/Choose";
 import Login from "./Pages/Login";
 import AppBar from "./AppBar";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +31,8 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    console.log("role", role);
     if (token) {
       dispatch(loadUser());
     }
@@ -77,7 +78,10 @@ function App() {
             <Route path="/permission" element={<Permission />} />
             <Route path="/permManage" element={<PermissionManage />} />
             <Route path="/roleManage" element={<RoleManagement />} />
-            <Route path="/userManage" element={<UserManagement companyId="6678812c8514f813f398d231" />} />
+            <Route element={<ProtectedRoute role='admin' />}>
+              <Route path="/userManage" element={<UserManagement companyId='668137420706bda71690a38f' />} />
+              {/* <Route path="/userManage" element={<UserManagement companyId={user.companyId} />} /> */}
+            </Route>
             <Route path="/docs" element={<DocumentList projectId="667ee886290d54a2fec60f72" />} />
             <Route path="/documents/:id" element={<Editor />} />
 
