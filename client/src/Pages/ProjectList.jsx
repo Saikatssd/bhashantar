@@ -50,6 +50,8 @@ const ProjectList = () => {
       {!isLoading && !error && (
         <div className="grid grid-cols-1 gap-20 md:grid-cols-4 p-4">
           {projects.map((project) => (
+            // console.log(project.hasOwnProperty('_id')),
+
             <Link to='/workspace'>
               <div
                 className="folder p-6 max-w-sm bg-[#90ebf5] rounded-t-lg border-t-8 border-[#03518a] shadow-md hover:shadow-lg transition-shadow duration-300"
@@ -58,6 +60,8 @@ const ProjectList = () => {
                 <div className="folder-tab bg-[#03518a] p-2 rounded-t-lg"></div>
                 <div className="p-4 text-center">
                   {project.name}
+                  {/* <br /> */}
+                  {/* {project._id && <span>(ID: {project._id})</span>} */}
                 </div>
               </div>
             </Link>
