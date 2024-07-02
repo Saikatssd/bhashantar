@@ -33,6 +33,7 @@ exports.register = async (req, res, next) => {
     if (!company && company_name) {
       return next(new ErrorHandler("Company not found", 400));
     }
+   
 
     // Create a new user
     user = await User.create({
@@ -40,7 +41,7 @@ exports.register = async (req, res, next) => {
       email,
       password: hashedPassword,
       role: role._id,
-      companyId: company ? company._id : null,
+      companyId: role_name==='superAdmin' ? null : company._id,
       // companyId: null,
     });
     if (role_name == "admin") {
@@ -103,7 +104,7 @@ exports.getUserProfile = async (req, res, next) => {
         name: user.name,
         email: user.email,
         role: user.role.role_name,
-        companyId:user.companyId,
+        companyId: user.companyId,
       },
     });
   } catch (error) {
